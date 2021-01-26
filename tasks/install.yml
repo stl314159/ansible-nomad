@@ -10,7 +10,7 @@
 
 - name: Check Nomad package checksum file
   stat:
-    path: "{{ role_path }}/files/nomad_{{ nomad_version }}_SHA256SUMS"
+    path: "{{ playbook_dir }}/files/nomad_{{ nomad_version }}_SHA256SUMS"
   become: false
   run_once: true
   tags: installation
@@ -30,7 +30,7 @@
 - name: Get Nomad package checksum
   shell: |
     set -o pipefail
-    grep "{{ nomad_pkg }}" "{{ role_path }}/files/nomad_{{ nomad_version }}_SHA256SUMS"  | awk '{print $1}'
+    grep "{{ nomad_pkg }}" "{{ playbook_dir }}/files/nomad_{{ nomad_version }}_SHA256SUMS"  | awk '{print $1}'
   args:
     executable: /bin/bash
   become: false
@@ -40,7 +40,7 @@
 
 - name: Check Nomad package file
   stat:
-    path: "{{ role_path }}/files/{{ nomad_pkg }}"
+    path: "{{ playbook_dir }}/files/{{ nomad_pkg }}"
   become: false
   register: nomad_package
   delegate_to: 127.0.0.1
@@ -67,7 +67,7 @@
 
 - name: Unarchive Nomad
   unarchive:
-    src: "{{ role_path }}/files/{{ nomad_pkg }}"
+    src: "{{ playbook_dir }}/files/{{ nomad_pkg }}"
     dest: "{{ install_temp.path }}/"
     creates: "{{ install_temp.path }}/nomad"
   become: false
